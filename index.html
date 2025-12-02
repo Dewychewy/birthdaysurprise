@@ -73,12 +73,21 @@
 
         .heart {
             position: absolute;
-            font-size: 50px;
+            width: 80px;
+            height: 80px;
             cursor: pointer;
             animation: fall linear;
             user-select: none;
             z-index: 10;
             transition: transform 0.1s;
+            clip-path: path('M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z');
+            transform-origin: center;
+        }
+
+        .heart img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .heart:active {
@@ -207,13 +216,13 @@
         .content-box {
             position: relative;
             z-index: 10;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.85);
             max-width: 600px;
             margin: 0 auto;
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
         }
 
         h1 {
@@ -309,25 +318,25 @@
         <div class="scrapbook-bg">
             <!-- REPLACE ALL src="PHOTO_URL_HERE" WITH YOUR GOOGLE DRIVE DIRECT LINKS -->
             <div class="photo-frame photo-1">
-          <img src="https://lh3.googleusercontent.com/d/1bUSMuajRfq_ZtDUyG66Kxvc5SZ-evUKD" alt="Memory 1">
+                <img src="PHOTO_URL_1_HERE" alt="Memory 1">
             </div>
             <div class="photo-frame photo-2">
-                <img src="https://lh3.googleusercontent.com/d/1mahp8NGsCTDoClQZQvEbTlOJ9L27Lh4w" alt="Memory 2">
+                <img src="PHOTO_URL_2_HERE" alt="Memory 2">
             </div>
             <div class="photo-frame photo-3">
-                <img src="https://lh3.googleusercontent.com/d/1jqds-NwH-ElH5vIyakNRo0Yg7DxSFA2B" alt="Memory 3">
+                <img src="PHOTO_URL_3_HERE" alt="Memory 3">
             </div>
             <div class="photo-frame photo-4">
-                <img src="https://lh3.googleusercontent.com/d/1kc0m0g5aip15oAl-jEF9RuNv_IKmcW5C" alt="Memory 4">
+                <img src="PHOTO_URL_4_HERE" alt="Memory 4">
             </div>
             <div class="photo-frame photo-5">
-                <img src="https://lh3.googleusercontent.com/d/1JX0gbxuQwwFDocgN2DDYpCNZwwHyRXua" alt="Memory 5">
+                <img src="PHOTO_URL_5_HERE" alt="Memory 5">
             </div>
             <div class="photo-frame photo-6">
-                <img src="https://lh3.googleusercontent.com/d/1ie2rnVXbYLq1cBsfaSc28RFQ2LYNwHc8" alt="Memory 6">
+                <img src="PHOTO_URL_6_HERE" alt="Memory 6">
             </div>
             <div class="photo-frame photo-7">
-                <img src="https://lh3.googleusercontent.com/d/1wPzZiFSQUraYePyrGFaf7DdH2W6_7Hbk" alt="Memory 7">
+                <img src="PHOTO_URL_7_HERE" alt="Memory 7">
             </div>
         </div>
 
@@ -372,14 +381,30 @@
         const countDisplay = document.getElementById('count');
         const meterFill = document.getElementById('meterFill');
 
+        // Array of photo URLs for the falling hearts
+        const heartImages = [
+            'https://lh3.googleusercontent.com/d/1F8IdbBFaQkmsOJpp9zJgKOa7Cz7kBj0j',
+            'https://lh3.googleusercontent.com/d/1NrxRs7dbGoTqdDnYCpkdRBmirwfjKF1Q',
+            'https://lh3.googleusercontent.com/d/1O1r6Wo314sCjlmffSHRgby4bP1e7q6UF',
+            'https://lh3.googleusercontent.com/d/1a7pCJhtx-KzIHywq7sQb3kQTsyQ-C3Pp',
+            'https://lh3.googleusercontent.com/d/1f8zH3i1ww2P66DAxMKcG0qUl1F6b-JJi',
+            'https://lh3.googleusercontent.com/d/1jeGAZtmvRvnSRDLoAaApmYl36fREsYbL',
+            'https://lh3.googleusercontent.com/d/1kYfKWjJKy0pyfgYzEto5xgsG4ljmDvWp'
+        ];
+
         function createHeart() {
             if (heartCount >= maxHearts) return;
             
             const heart = document.createElement('div');
             heart.className = 'heart';
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * (window.innerWidth - 50) + 'px';
-            heart.style.top = '-60px';
+            
+            // Create img element with random photo
+            const img = document.createElement('img');
+            img.src = heartImages[Math.floor(Math.random() * heartImages.length)];
+            heart.appendChild(img);
+            
+            heart.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+            heart.style.top = '-100px';
             
             const duration = 3 + Math.random() * 3;
             heart.style.animationDuration = duration + 's';
