@@ -73,8 +73,8 @@
 
         .heart {
             position: absolute;
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             cursor: pointer;
             animation: fall linear;
             user-select: none;
@@ -403,7 +403,7 @@
             img.src = heartImages[Math.floor(Math.random() * heartImages.length)];
             heart.appendChild(img);
             
-            heart.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+            heart.style.left = Math.random() * (window.innerWidth - 120) + 'px';
             heart.style.top = '-100px';
             
             const duration = 3 + Math.random() * 3;
