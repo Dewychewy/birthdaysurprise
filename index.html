@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 21st Birthday! ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffc0cb 0%, #ffb6c1 50%, #ff69b4 100%);
+            touch-action: manipulation;
+        }
+
+        /* Game Screen */
+        #gameScreen {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #heartCounter {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 20px 40px;
+            border-radius: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff1493;
+            z-index: 100;
+        }
+
+        #meterContainer {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 400px;
+            background: white;
+            border-radius: 25px;
+            padding: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+
+        #meterFill {
+            height: 30px;
+            background: linear-gradient(90deg, #ff1493, #ff69b4);
+            border-radius: 15px;
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 50px;
+            cursor: pointer;
+            animation: fall linear;
+            user-select: none;
+            z-index: 10;
+            transition: transform 0.1s;
+        }
+
+        .heart:active {
+            transform: scale(1.3);
+        }
+
+        @keyframes fall {
+            to {
+                top: 100vh;
+            }
+        }
+
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .collected {
+            animation: heartPop 0.5s ease-out;
+        }
+
+        /* Message Screen */
+        #messageScreen {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            overflow-y: auto;
+            opacity: 0;
+            position: relative;
+            padding: 40px 20px;
+        }
+
+        #messageScreen.show {
+            display: block;
+            animation: fadeIn 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .scrapbook-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .photo-frame {
+            position: absolute;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transform: rotate(var(--rotation));
+            border-radius: 5px;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Photo positions - REPLACE THESE URLS WITH YOUR GOOGLE DRIVE LINKS */
+        .photo-1 {
+            width: 150px;
+            height: 150px;
+            top: 5%;
+            left: 5%;
+            --rotation: -8deg;
+        }
+
+        .photo-2 {
+            width: 180px;
+            height: 120px;
+            top: 10%;
+            right: 8%;
+            --rotation: 12deg;
+        }
+
+        .photo-3 {
+            width: 140px;
+            height: 180px;
+            top: 35%;
+            left: 3%;
+            --rotation: -15deg;
+        }
+
+        .photo-4 {
+            width: 160px;
+            height: 160px;
+            top: 40%;
+            right: 5%;
+            --rotation: 8deg;
+        }
+
+        .photo-5 {
+            width: 170px;
+            height: 130px;
+            bottom: 25%;
+            left: 8%;
+            --rotation: 10deg;
+        }
+
+        .photo-6 {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            right: 10%;
+            --rotation: -12deg;
+        }
+
+        .photo-7 {
+            width: 140px;
+            height: 140px;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%) rotate(5deg);
+        }
+
+        .content-box {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #ff1493;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .message {
+            color: #333;
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        h2 {
+            color: #ff1493;
+            font-size: 26px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .love-list {
+            color: #333;
+            font-size: 17px;
+            line-height: 2;
+            text-align: left;
+        }
+
+        .final-message {
+            color: #ff1493;
+            font-size: 24px;
+            text-align: center;
+            margin-top: 40px;
+            font-weight: bold;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            #heartCounter {
+                font-size: 22px;
+                padding: 15px 30px;
+                top: 20px;
+            }
+
+            #meterContainer {
+                top: 80px;
+                width: 90%;
+            }
+
+            .heart {
+                font-size: 40px;
+            }
+
+            .content-box {
+                padding: 25px;
+                margin: 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .message, .love-list {
+                font-size: 16px;
+            }
+
+            .photo-frame {
+                padding: 10px;
+            }
+
+            .photo-1, .photo-2, .photo-3, .photo-4, .photo-5, .photo-6, .photo-7 {
+                width: 100px !important;
+                height: 100px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Game Screen -->
+    <div id="gameScreen">
+        <div id="heartCounter">Hearts: <span id="count">0</span>/10</div>
+        <div id="meterContainer">
+            <div id="meterFill"></div>
+        </div>
+    </div>
+
+    <!-- Message Screen -->
+    <div id="messageScreen">
+        <div class="scrapbook-bg">
+            <!-- REPLACE ALL src="PHOTO_URL_HERE" WITH YOUR GOOGLE DRIVE DIRECT LINKS -->
+            <div class="photo-frame photo-1">
+                <img src="https://drive.google.com/uc?export=view&id=1bUSMuajRfq_ZtDUyG66Kxvc5SZ-evUKD" alt="Memory 1">
+            </div>
+            <div class="photo-frame photo-2">
+                <img src="https://drive.google.com/uc?export=view&id=1mahp8NGsCTDoClQZQvEbTlOJ9L27Lh4w" alt="Memory 2">
+            </div>
+            <div class="photo-frame photo-3">
+                <img src="https://drive.google.com/uc?export=view&id=1jqds-NwH-ElH5vIyakNRo0Yg7DxSFA2B" alt="Memory 3">
+            </div>
+            <div class="photo-frame photo-4">
+                <img src="https://drive.google.com/uc?export=view&id=1kc0m0g5aip15oAl-jEF9RuNv_IKmcW5C" alt="Memory 4">
+            </div>
+            <div class="photo-frame photo-5">
+                <img src="https://drive.google.com/uc?export=view&id=1JX0gbxuQwwFDocgN2DDYpCNZwwHyRXua" alt="Memory 5">
+            </div>
+            <div class="photo-frame photo-6">
+                <img src="https://drive.google.com/uc?export=view&id=1ie2rnVXbYLq1cBsfaSc28RFQ2LYNwHc8" alt="Memory 6">
+            </div>
+            <div class="photo-frame photo-7">
+                <img src="https://drive.google.com/uc?export=view&id=1wPzZiFSQUraYePyrGFaf7DdH2W6_7Hbk" alt="Memory 7">
+            </div>
+        </div>
+
+        <div class="content-box">
+            <h1>Happy 21st Birthday Baby! 🎉</h1>
+            
+            <div class="message">
+                Best d ma main mini game idiet d. I made sure to make the game easy sbb u bobo d so u can pass the game and able to read this message from me to you.<br><br>
+                
+                I geeb 10 hearts d but you got the real one from day 1. I love you more than words can fit on this screen even though u got the plus and that just proves how much my love means to you. Bigger than 6.33 inches for sure.<br><br>
+                
+                I wanna say thank you for sticking around for this long despite the cons of having me as your boyfriend and im making sure that i try everyday to do better with how i treat you especially with the jokes boundary. I respect you and i love you. Enjoy the rest of your birthday like its the last!!
+            </div>
+
+            <h2>10 Things I Love About You ❤️</h2>
+            
+            <div class="love-list">
+                1. Your unconditional love towards me<br>
+                2. You tak berkira<br>
+                3. Never have i seen you gave me up no matter how much i mess things up sometimes<br>
+                4. You support me in anything i do and at least try to take an interest to it (i know i have too many hobbies i need to stop myself pls elp)<br>
+                5. Your forehead<br>
+                6. Your smile with the fake teeth you got is just so so so so lovely i love it sm<br>
+                7. Your patience towards me is just crazy<br>
+                8. Your big heart (boob)<br>
+                9. Your honesty<br>
+                10. Your kiss<br>
+            </div>
+
+            <div class="final-message">
+                I love you, baby. ❤️
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let heartCount = 0;
+        const maxHearts = 10;
+        let activeHearts = [];
+        const gameScreen = document.getElementById('gameScreen');
+        const messageScreen = document.getElementById('messageScreen');
+        const countDisplay = document.getElementById('count');
+        const meterFill = document.getElementById('meterFill');
+
+        function createHeart() {
+            if (heartCount >= maxHearts) return;
+            
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            heart.style.top = '-60px';
+            
+            const duration = 3 + Math.random() * 3;
+            heart.style.animationDuration = duration + 's';
+            
+            gameScreen.appendChild(heart);
+            activeHearts.push(heart);
+
+            heart.addEventListener('click', function(e) {
+                e.preventDefault();
+                collectHeart(heart);
+            });
+
+            heart.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                collectHeart(heart);
+            });
+
+            setTimeout(() => {
+                if (heart.parentNode && !heart.classList.contains('collected')) {
+                    heart.remove();
+                    activeHearts = activeHearts.filter(h => h !== heart);
+                }
+            }, duration * 1000);
+        }
+
+        function collectHeart(heart) {
+            if (heart.classList.contains('collected')) return;
+            
+            heart.classList.add('collected');
+            heartCount++;
+            countDisplay.textContent = heartCount;
+            
+            const percentage = (heartCount / maxHearts) * 100;
+            meterFill.style.width = percentage + '%';
+            
+            setTimeout(() => {
+                heart.remove();
+                activeHearts = activeHearts.filter(h => h !== heart);
+            }, 500);
+
+            if (heartCount >= maxHearts) {
+                setTimeout(showMessage, 1000);
+            }
+        }
+
+        function showMessage() {
+            activeHearts.forEach(heart => heart.remove());
+            activeHearts = [];
+            
+            gameScreen.style.animation = 'fadeOut 1.5s forwards';
+            
+            setTimeout(() => {
+                gameScreen.style.display = 'none';
+                messageScreen.classList.add('show');
+            }, 1500);
+        }
+
+        const style = document.createElement('style');
+        style.textContent = '@keyframes fadeOut { to { opacity: 0; } }';
+        document.head.appendChild(style);
+
+        // Spawn hearts continuously
+        setInterval(createHeart, 800);
+        
+        // Initial hearts
+        for (let i = 0; i < 3; i++) {
+            setTimeout(createHeart, i * 300);
+        }
+    </script>
+</body>
+</html>
