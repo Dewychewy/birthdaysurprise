@@ -449,5 +449,19 @@
             setTimeout(createHeart, i * 300);
         }
     </script>
+
+    <!-- Background Music -->
+    <audio id="bgm" autoplay loop>
+        <source src="https://drive.google.com/uc?export=download&id=1etNidQPall0cRWAsqo7vEK6FJrx-qEoC" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // iPhone requires user interaction before audio can play
+        document.addEventListener('touchstart', function () {
+            const audio = document.getElementById('bgm');
+            if (audio.paused) audio.play().catch(()=>{});
+        }, { once: true });
+    </script>
+
 </body>
 </html>
